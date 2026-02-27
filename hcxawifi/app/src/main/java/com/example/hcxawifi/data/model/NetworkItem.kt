@@ -7,7 +7,6 @@ data class NetworkItem(
     val capabilities: String,
     val frequency: Float,
     val channel: Int,
-    val security: String,
     val standard: String,
     val password: String?
 )

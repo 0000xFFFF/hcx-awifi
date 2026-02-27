@@ -2,86 +2,111 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#1F1F1F"
-    android:gravity="center_vertical"
+    android:background="@color/monokai_background"
     android:orientation="horizontal"
+    android:gravity="center_vertical"
     android:padding="12dp">
 
+    <!-- LEFT CONTENT -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="#1F1F1F"
         android:orientation="vertical">
 
-        <!-- BSSID, SSID, PASSWORD row -->
+        <!-- ROW 1: BSSID | ESSID | PASSWORD -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#1F1F1F"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
             <TextView
                 android:id="@+id/bssid"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="BSSID"
-                android:textColor="#BB86FC"
+                android:textColor="@color/monokai_purple"
                 android:textSize="12sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginEnd="12dp"/>
 
             <TextView
                 android:id="@+id/essid"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="ESSID"
-                android:textColor="#E0E0E0"
+                android:textColor="@color/monokai_foreground"
                 android:textSize="12sp"
                 android:textStyle="bold" />
+
+            <!-- Spacer pushes password right -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/password"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text=""
-                android:textColor="#E0E0E0"
+                android:textColor="@color/monokai_red"
                 android:textSize="12sp"
                 android:textStyle="bold" />
+
         </LinearLayout>
 
-        <!-- Details row -->
+        <!-- ROW 2: DETAILS -->
         <TextView
             android:id="@+id/details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="Details"
-            android:textColor="#888888"
+            android:textColor="@color/monokai_comment"
             android:textSize="10sp" />
 
-        <!-- ProgressBar for signal strength -->
-        <ProgressBar
-            android:id="@+id/signalBar"
-            style="@android:style/Widget.ProgressBar.Horizontal"
+        <!-- ROW 3: PROGRESSBAR + LEVEL -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="6dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:max="100"
-            android:progress="0"
-            android:progressTint="#1DB679" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ProgressBar
+                android:id="@+id/signalBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="6dp"
+                android:layout_weight="1"
+                android:max="100"
+                android:progress="0"
+                android:progressBackgroundTint="@color/monokai_selection"
+                android:progressTint="@color/monokai_green" />
+
+            <TextView
+                android:id="@+id/level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="0%"
+                android:textColor="@color/monokai_foreground"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
-    <!-- Lock icon on the right -->
+    <!-- RIGHT LOCK ICON -->
     <ImageView
         android:id="@+id/securityIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="12dp"
         android:contentDescription="Security Icon"
-        android:src="@android:drawable/ic_lock_idle_lock"
-        android:tint="#BB86FC" />
+        android:src="@android:drawable/ic_lock_idle_lock" />
+
 </LinearLayout>

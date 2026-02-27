@@ -86,7 +86,6 @@ class WifiScanManager(
                     capabilities = scanResult.capabilities,
                     frequency = scanResult.frequency.toFloat(),
                     channel = NetworkUtils.getChannelFromFrequency(scanResult.frequency),
-                    security = scanResult.capabilities,
                     standard = NetworkUtils.getStandardName(
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                             scanResult.wifiStandard

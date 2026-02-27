@@ -28,12 +28,14 @@ class WifiAdapter(
         val bssidText: TextView = view.findViewById(R.id.bssid)
         val detailsText: TextView = view.findViewById(R.id.details)
         val passwordText: TextView = view.findViewById(R.id.password)
+        val levelText: TextView = view.findViewById(R.id.level)
         val icon: ImageView = view.findViewById(R.id.securityIcon)
         val signalBar: ProgressBar = view.findViewById(R.id.signalBar)
 
-        essidText.text = if (network.ssid.isNotEmpty()) { network.ssid  } else { "<Hidden SSID>" }
-        bssidText.text = network.bssid.uppercase() ?: "Unknown";
-        detailsText.text = "${network.level} dBm | ${network.capabilities ?: ""}"
+        essidText.text = network.ssid.ifEmpty { "<Hidden SSID>" }
+        bssidText.text = network.bssid.uppercase()
+        detailsText.text = network.capabilities
+        levelText.text = "${network.level} dBm"
         passwordText.text = network.password?: ""
 
         try {

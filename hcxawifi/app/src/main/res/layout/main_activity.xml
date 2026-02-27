@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212">
+    android:background="@color/monokai_background">
 
     <!-- Scan Button -->
     <Button
@@ -12,8 +12,9 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="Scan"
-        android:backgroundTint="#6200EE"
-        android:textColor="#FFFFFF"
+        android:backgroundTint="@color/monokai_purple"
+        android:textColor="@color/monokai_background"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/loadCsvButton"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,8 +27,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Load CSV"
-        android:backgroundTint="#6200EE"
-        android:textColor="#FFFFFF"
+        android:backgroundTint="@color/monokai_red"
+        android:textColor="@color/monokai_background"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@id/scanButton"
@@ -40,7 +42,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Status: Idle"
-        android:textColor="#BB86FC"
+        android:textColor="@color/monokai_purple"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@id/scanButton"
         app:layout_constraintStart_toStartOf="@id/scanButton"
         app:layout_constraintTop_toBottomOf="@id/scanButton" />
@@ -52,7 +55,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="CSV Loaded: 0 items"
-        android:textColor="#BB86FC"
+        android:textColor="@color/monokai_red"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@id/loadCsvButton"
         app:layout_constraintStart_toStartOf="@id/loadCsvButton"
         app:layout_constraintTop_toBottomOf="@id/loadCsvButton" />
@@ -63,8 +67,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        android:background="#121212"
-        android:divider="#1F1F1F"
+        android:background="@color/monokai_background"
+        android:divider="@color/monokai_line"
         android:dividerHeight="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
