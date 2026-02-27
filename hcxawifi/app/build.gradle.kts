@@ -5,16 +5,12 @@ plugins {
 
 android {
     namespace = "com.example.hcxawifi"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 36   // updated to meet library requirements
 
     defaultConfig {
         applicationId = "com.example.hcxawifi"
-        minSdk = 30
-        targetSdk = 36
+        minSdk = 28     // Android 9+ (compatible with Galaxy S10)
+        targetSdk = 36  // match compileSdk
         versionCode = 1
         versionName = "1.0"
 
@@ -30,10 +26,12 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     buildFeatures {
         compose = true
     }

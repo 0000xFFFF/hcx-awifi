@@ -7,6 +7,7 @@ import android.content.*
 import android.content.pm.PackageManager
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,16 +34,13 @@ class MainActivity : ComponentActivity() {
         // Get WifiManager
         wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
+        checkPermissionAndScan()
+
         // Button click
-        scanButton.setOnClickListener {
-            checkPermissionAndScan()
-        }
+        scanButton.setOnClickListener { checkPermissionAndScan() }
 
         // Register receiver for scan results
-        registerReceiver(
-            wifiScanReceiver,
-            IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-        )
+        registerReceiver(wifiScanReceiver, IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
 
         listView.setOnItemClickListener { _, _, position, _ ->
             val network = listView.adapter.getItem(position) as ScanResult
@@ -53,15 +51,47 @@ class MainActivity : ComponentActivity() {
             intent.putExtra("FREQ", network.frequency)
             intent.putExtra("LEVEL", network.level)
             intent.putExtra("CAP", network.capabilities)
-            intent.putExtra("STD", network.wifiStandard)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                intent.putExtra("STD", network.wifiStandard)
+            }
             intent.putExtra("PASS", network.isPasspointNetwork)
             startActivity(intent)
+        }
+    }
+
+    private var scanResultsCallback: WifiManager.ScanResultsCallback? = null
+    private fun startWifiScan() {
+        statusLabel.text = "Scanning..."
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Unregister previous callback if any
+            scanResultsCallback?.let { wifiManager.unregisterScanResultsCallback(it) }
+
+            val callback = object : WifiManager.ScanResultsCallback() {
+                override fun onScanResultsAvailable() {
+                    if (ContextCompat.checkSelfPermission(
+                            this@MainActivity,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        statusLabel.text = "Permission missing"
+                        return
+                    }
+                    updateListView(wifiManager.scanResults)
+                }
+            }
+            scanResultsCallback = callback
+            wifiManager.registerScanResultsCallback(mainExecutor, callback)
+            wifiManager.startScan() // still needed to trigger a fresh scan
+        } else {
+            // Legacy path — BroadcastReceiver handles results
+            wifiManager.startScan()
         }
     }
 
     // BroadcastReceiver for scan completion
     private val wifiScanReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) return // handled by callback
 
             if (ContextCompat.checkSelfPermission(
                     this@MainActivity,
@@ -71,36 +101,46 @@ class MainActivity : ComponentActivity() {
                 statusLabel.text = "Permission missing"
                 return
             }
-
             try {
-                val results = wifiManager.scanResults
-
-                statusLabel.text = "Found ${results.size} networks"
-
-                val networkList = results.map {
-                    "${it.SSID} | ${it.BSSID} | ${it.level} dBm | ${it.capabilities}"
-                }
-
-                val strongestBySSID = results
-                    .groupBy { it.SSID }
-                    .mapNotNull { (_, group) ->
-                        // Ignore hidden SSIDs
-                        group.maxByOrNull { it.level }
-                    }
-                    .sortedByDescending { it.level }
-                listView.adapter = WifiAdapter(this@MainActivity, strongestBySSID)
-
+                updateListView(wifiManager.scanResults)
             } catch (e: SecurityException) {
-                statusLabel.text = "Permission error: " + e.message
+                statusLabel.text = "Permission error: ${e.message}"
             }
         }
+    }
+
+    private fun updateListView(results: List<ScanResult>) {
+        val filtered = results
+            .groupBy { it.BSSID }
+            .mapNotNull { (_, group) -> group.maxByOrNull { it.level } }
+            .sortedByDescending { it.level }
+
+        listView.adapter = WifiAdapter(this, filtered)
+
+        // Flash the status label green briefly
+        statusLabel.text = "Updated — ${filtered.size} networks"
+        statusLabel.setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark))
+        statusLabel.animate()
+            .alpha(1f)
+            .setDuration(200)
+            .withEndAction {
+                statusLabel.animate()
+                    .alpha(0.6f)
+                    .setDuration(1000)
+                    .withEndAction {
+                        statusLabel.setTextColor(ContextCompat.getColor(this, android.R.color.black))
+                        statusLabel.alpha = 1f
+                    }
+                    .start()
+            }
+            .start()
     }
 
     // Permission launcher
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                startWifiScan()
+                startWifiScan() // or startWifiScanModern() if API >= 30
             } else {
                 statusLabel.text = "Permission denied"
             }
@@ -112,7 +152,7 @@ class MainActivity : ComponentActivity() {
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED -> {
-                startWifiScan()
+                startWifiScan() // start scanning immediately
             }
 
             else -> {
@@ -121,14 +161,12 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun startWifiScan() {
-        statusLabel.text = "Scanning..."
-        wifiManager.startScan()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(wifiScanReceiver)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            scanResultsCallback?.let { wifiManager.unregisterScanResultsCallback(it) }
+        }
     }
 
     class WifiAdapter(
@@ -145,7 +183,7 @@ class MainActivity : ComponentActivity() {
             val icon: ImageView = view.findViewById(R.id.securityIcon)
 
             // Safe text
-            ssidText.text = if (network.SSID.isNotEmpty()) network.SSID else "<Hidden SSID>"
+            ssidText.text = if (network.SSID.toString().isNotEmpty()) network.SSID.toString() else "<Hidden SSID>"
             detailsText.text = "${network.BSSID ?: "Unknown"} | ${network.level} dBm | ${network.capabilities ?: ""}"
 
             // Safe icon
