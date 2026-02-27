@@ -14,65 +14,84 @@ import java.util.concurrent.Executor
 class WifiScanManager(
     private val context: Context,
     private val repository: NetworkItemCsvRepository,
+    private val executor: Executor,
     private val onScanComplete: (List<ScanResult>) -> Unit,
     private val onError: (String) -> Unit
 ) {
-    private val wifiManager: WifiManager = 
+    private val wifiManager: WifiManager =
         context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-    
-    private var scanResultsCallback: WifiManager.ScanResultsCallback? = null
-    
+
+    private var isScanning = false
+
+    // --- Legacy receiver (API < 30) ---
     private val wifiScanReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) return
-            
+            isScanning = false
             try {
-                val results = wifiManager.scanResults
-                onScanComplete(results)
+                onScanComplete(wifiManager.scanResults)
             } catch (e: SecurityException) {
                 onError("Permission error: ${e.message}")
             }
         }
     }
-    
-    fun registerReceiver() {
-        context.registerReceiver(
-            wifiScanReceiver, 
-            IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-        )
-    }
-    
-    fun unregisterReceiver() {
-        try {
-            context.unregisterReceiver(wifiScanReceiver)
-        } catch (e: IllegalArgumentException) {
-            // Already unregistered
-        }
-        
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            scanResultsCallback?.let { wifiManager.unregisterScanResultsCallback(it) }
-        }
-    }
-    
-    fun startScan(executor: Executor) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            scanResultsCallback?.let { wifiManager.unregisterScanResultsCallback(it) }
-            
-            val callback = object : WifiManager.ScanResultsCallback() {
-                override fun onScanResultsAvailable() {
-                    try {
-                        onScanComplete(wifiManager.scanResults)
-                    } catch (e: SecurityException) {
-                        onError("Permission error: ${e.message}")
-                    }
+
+    // --- Modern callback (API >= 30) ---
+    private val scanResultsCallback = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        object : WifiManager.ScanResultsCallback() {
+            override fun onScanResultsAvailable() {
+                isScanning = false
+                try {
+                    onScanComplete(wifiManager.scanResults)
+                } catch (e: SecurityException) {
+                    onError("Permission error: ${e.message}")
                 }
             }
-            scanResultsCallback = callback
-            wifiManager.registerScanResultsCallback(executor, callback)
         }
-        wifiManager.startScan()
+    } else null
+
+    init {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            scanResultsCallback?.let {
+                wifiManager.registerScanResultsCallback(executor, it)
+            }
+        } else {
+            context.registerReceiver(
+                wifiScanReceiver,
+                IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
+            )
+        }
     }
-    
+
+    fun destroy() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            scanResultsCallback?.let { wifiManager.unregisterScanResultsCallback(it) }
+        } else {
+            try {
+                context.unregisterReceiver(wifiScanReceiver)
+            } catch (e: IllegalArgumentException) {
+                // Already unregistered
+            }
+        }
+    }
+
+    fun startScan() {
+        if (isScanning) return
+        isScanning = true
+
+        @Suppress("DEPRECATION")
+        val started = wifiManager.startScan()
+
+        if (!started) {
+            // OS throttled the scan, deliver cached results instead
+            isScanning = false
+            try {
+                onScanComplete(wifiManager.scanResults)
+            } catch (e: SecurityException) {
+                onError("Permission error: ${e.message}")
+            }
+        }
+    }
+
     fun filterAndSortResults(results: List<ScanResult>): List<NetworkItem> {
         return results
             .groupBy { it.BSSID }

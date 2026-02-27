@@ -1,78 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/monokai_background">
 
-    <!-- Scan Button -->
-    <Button
-        android:id="@+id/scanButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="Scan"
-        android:backgroundTint="@color/monokai_purple"
-        android:textColor="@color/monokai_background"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/loadCsvButton"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <!-- Load CSV Button -->
-    <Button
-        android:id="@+id/loadCsvButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Load CSV"
-        android:backgroundTint="@color/monokai_red"
-        android:textColor="@color/monokai_background"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toEndOf="@id/scanButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="274dp"
+            android:layout_height="6dp"
+            tools:layout_editor_absoluteX="136dp"
+            tools:layout_editor_absoluteY="331dp">
 
-    <!-- Status Label under Scan -->
-    <TextView
-        android:id="@+id/scanStatusLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Status: Idle"
-        android:textColor="@color/monokai_purple"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@id/scanButton"
-        app:layout_constraintStart_toStartOf="@id/scanButton"
-        app:layout_constraintTop_toBottomOf="@id/scanButton" />
+            <!-- Scan Button -->
+            <Button
+                android:id="@+id/scanButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="Scan"
+                android:backgroundTint="@color/monokai_purple"
+                android:textColor="@color/monokai_background"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/loadCsvButton"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- CSV Loaded Label under Load CSV -->
-    <TextView
-        android:id="@+id/loadCsvStatusLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="CSV Loaded: 0 items"
-        android:textColor="@color/monokai_red"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@id/loadCsvButton"
-        app:layout_constraintStart_toStartOf="@id/loadCsvButton"
-        app:layout_constraintTop_toBottomOf="@id/loadCsvButton" />
+            <!-- Load CSV Button -->
+            <Button
+                android:id="@+id/loadCsvButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Load CSV"
+                android:backgroundTint="@color/monokai_red"
+                android:textColor="@color/monokai_background"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/scanButton"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- ListView -->
-    <ListView
-        android:id="@+id/networkList"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/monokai_background"
-        android:divider="@color/monokai_line"
-        android:dividerHeight="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/scanStatusLabel" />
+            <!-- Status Label under Scan -->
+            <TextView
+                android:id="@+id/scanStatusLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Status: Idle"
+                android:textColor="@color/monokai_purple"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@id/scanButton"
+                app:layout_constraintStart_toStartOf="@id/scanButton"
+                app:layout_constraintTop_toBottomOf="@id/scanButton" />
 
+            <!-- CSV Loaded Label under Load CSV -->
+            <TextView
+                android:id="@+id/loadCsvStatusLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="CSV Loaded: 0 items"
+                android:textColor="@color/monokai_red"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@id/loadCsvButton"
+                app:layout_constraintStart_toStartOf="@id/loadCsvButton"
+                app:layout_constraintTop_toBottomOf="@id/loadCsvButton" />
+
+            <!-- ListView -->
+            <ListView
+                android:id="@+id/networkList"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/monokai_background"
+                android:divider="@color/monokai_line"
+                android:dividerHeight="1dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/scanStatusLabel" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

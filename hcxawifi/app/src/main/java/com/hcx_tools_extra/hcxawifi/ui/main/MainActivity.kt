@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.hcx_tools_extra.hcxawifi.R
 import com.hcx_tools_extra.hcxawifi.data.model.NetworkItem
 import com.hcx_tools_extra.hcxawifi.data.repository.NetworkItemCsvRepository
@@ -22,6 +23,7 @@ import com.hcx_tools_extra.hcxawifi.utils.WifiScanManager
 
 class MainActivity : ComponentActivity() {
 
+    private lateinit var swipeRefresh: SwipeRefreshLayout
     private lateinit var repository: NetworkItemCsvRepository
     private lateinit var wifiScanManager: WifiScanManager
     
@@ -41,6 +43,7 @@ class MainActivity : ComponentActivity() {
         loadCsvButton = findViewById(R.id.loadCsvButton)
         loadCsvStatusLabel = findViewById(R.id.loadCsvStatusLabel)
         listView = findViewById(R.id.networkList)
+        swipeRefresh = findViewById(R.id.swipeRefresh)
 
         // Initialize repository
         repository = NetworkItemCsvRepository(this)
@@ -49,10 +52,15 @@ class MainActivity : ComponentActivity() {
         wifiScanManager = WifiScanManager(
             context = this,
             repository,
+            mainExecutor,
             onScanComplete = { results -> handleScanResults(results) },
             onError = { error -> scanStatusLabel.text = error }
         )
-        wifiScanManager.registerReceiver()
+
+        swipeRefresh.setOnRefreshListener {
+            startWifiScan()
+            swipeRefresh.isRefreshing = false
+        }
 
         // Setup click listeners
         scanButton.setOnClickListener { checkPermissionAndScan() }
@@ -111,7 +119,7 @@ class MainActivity : ComponentActivity() {
 
     private fun startWifiScan() {
         scanStatusLabel.text = "Scanning..."
-        wifiScanManager.startScan(mainExecutor)
+        wifiScanManager.startScan()
     }
 
     private fun openCsvFilePicker() {
@@ -138,10 +146,5 @@ class MainActivity : ComponentActivity() {
 
     private fun updateCsvLabel(count: Int) {
         loadCsvStatusLabel.text = "$count passwords"
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        wifiScanManager.unregisterReceiver()
     }
 }
