@@ -15,13 +15,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.example.hcxawifi.R
-import com.example.hcxawifi.data.repository.CsvRepository
+import com.example.hcxawifi.data.repository.NetworkItemCsvRepository
 import com.example.hcxawifi.utils.UiHelper
 import com.example.hcxawifi.utils.WifiScanManager
 
 class MainActivity : ComponentActivity() {
 
-    private lateinit var repository: CsvRepository
+    private lateinit var repository: NetworkItemCsvRepository
     private lateinit var wifiScanManager: WifiScanManager
     
     private lateinit var scanButton: Button
@@ -42,11 +42,12 @@ class MainActivity : ComponentActivity() {
         listView = findViewById(R.id.networkList)
 
         // Initialize repository
-        repository = CsvRepository(this)
+        repository = NetworkItemCsvRepository(this)
 
         // Initialize WiFi scan manager
         wifiScanManager = WifiScanManager(
             context = this,
+            repository,
             onScanComplete = { results -> handleScanResults(results) },
             onError = { error -> scanStatusLabel.text = error }
         )
@@ -60,8 +61,9 @@ class MainActivity : ComponentActivity() {
         }
 
         // Load cached data on startup
-        if (repository.hasCache()) {
-            updateCsvLabel(repository.getCachedItemCount())
+        repository.loadFromCache()
+        if (repository.itemsCsv.isNotEmpty()) {
+            updateCsvLabel(repository.itemsCsv.size)
         }
 
         checkPermissionAndScan()
@@ -138,7 +140,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun updateCsvLabel(count: Int) {
-        loadCsvStatusLabel.text = "CSV Loaded: $count items"
+        loadCsvStatusLabel.text = "$count passwords"
     }
 
     override fun onDestroy() {

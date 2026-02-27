@@ -9,4 +9,5 @@ data class NetworkItem(
     val channel: Int,
     val security: String,
     val standard: String,
+    val password: String?
 )

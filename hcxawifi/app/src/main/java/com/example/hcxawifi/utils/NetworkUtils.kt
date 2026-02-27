@@ -26,4 +26,11 @@ object NetworkUtils {
     fun isSecureNetwork(capabilities: String): Boolean {
         return capabilities.contains("WEP") || capabilities.contains("WPA")
     }
+
+    fun bssidToLowerRemoveNonHex(bssid: String): String {
+        return bssid.lowercase()
+            .replace(":", "")
+            .replace("-", "")
+            .replace("_", "")
+    }
 }

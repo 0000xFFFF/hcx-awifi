@@ -1,7 +1,6 @@
 package com.example.hcxawifi.ui.main
 
 import android.content.Context
-import android.net.wifi.ScanResult
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,14 +24,17 @@ class WifiAdapter(
         
         val network = networks[position]
 
-        val ssidText: TextView = view.findViewById(R.id.ssid)
+        val essidText: TextView = view.findViewById(R.id.essid)
+        val bssidText: TextView = view.findViewById(R.id.bssid)
         val detailsText: TextView = view.findViewById(R.id.details)
+        val passwordText: TextView = view.findViewById(R.id.password)
         val icon: ImageView = view.findViewById(R.id.securityIcon)
         val signalBar: ProgressBar = view.findViewById(R.id.signalBar)
 
-        ssidText.text = if (network.ssid.isNotEmpty()) { network.ssid  } else { "<Hidden SSID>" }
-        
-        detailsText.text = "${network.bssid ?: "Unknown"} | ${network.level} dBm | ${network.capabilities ?: ""}"
+        essidText.text = if (network.ssid.isNotEmpty()) { network.ssid  } else { "<Hidden SSID>" }
+        bssidText.text = network.bssid.uppercase() ?: "Unknown";
+        detailsText.text = "${network.level} dBm | ${network.capabilities ?: ""}"
+        passwordText.text = network.password?: ""
 
         try {
             val iconRes = if (NetworkUtils.isSecureNetwork(network.capabilities)) {

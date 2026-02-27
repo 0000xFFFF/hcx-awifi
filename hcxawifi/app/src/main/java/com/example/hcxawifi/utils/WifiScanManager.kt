@@ -4,17 +4,16 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.net.Network
 import android.net.wifi.ScanResult
-import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.Build
-import android.telephony.NetworkScan
 import com.example.hcxawifi.data.model.NetworkItem
+import com.example.hcxawifi.data.repository.NetworkItemCsvRepository
 import java.util.concurrent.Executor
 
 class WifiScanManager(
     private val context: Context,
+    private val repository: NetworkItemCsvRepository,
     private val onScanComplete: (List<ScanResult>) -> Unit,
     private val onError: (String) -> Unit
 ) {
@@ -94,7 +93,8 @@ class WifiScanManager(
                         } else {
                             0
                         }
-                    )
+                    ),
+                    password = repository.getNetworkItemPassword(scanResult.BSSID, scanResult.SSID)
                 )
             }
     }
