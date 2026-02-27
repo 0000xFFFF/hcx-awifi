@@ -1,4 +1,4 @@
-package com.example.hcxawifi.ui.main
+package com.hcx_tools_extra.hcxawifi.ui.main
 
 import android.Manifest
 import android.content.Intent
@@ -14,10 +14,11 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import com.example.hcxawifi.R
-import com.example.hcxawifi.data.repository.NetworkItemCsvRepository
-import com.example.hcxawifi.utils.UiHelper
-import com.example.hcxawifi.utils.WifiScanManager
+import com.hcx_tools_extra.hcxawifi.R
+import com.hcx_tools_extra.hcxawifi.data.model.NetworkItem
+import com.hcx_tools_extra.hcxawifi.data.repository.NetworkItemCsvRepository
+import com.hcx_tools_extra.hcxawifi.utils.UiHelper
+import com.hcx_tools_extra.hcxawifi.utils.WifiScanManager
 
 class MainActivity : ComponentActivity() {
 
@@ -76,18 +77,14 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun handleNetworkItemClick(position: Int) {
-        val network = listView.adapter.getItem(position) as ScanResult
+        // Get the NetworkItem from the adapter
+        val network = listView.adapter.getItem(position) as NetworkItem
+
+        // Pass the whole object as a Parcelable
         val intent = Intent(this, NetworkDetailActivity::class.java).apply {
-            putExtra("SSID", network.SSID)
-            putExtra("BSSID", network.BSSID)
-            putExtra("FREQ", network.frequency)
-            putExtra("LEVEL", network.level)
-            putExtra("CAP", network.capabilities)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                putExtra("STD", network.wifiStandard)
-            }
-            putExtra("PASS", network.isPasspointNetwork)
+            putExtra("network", network) // NetworkItem implements Parcelable
         }
+
         startActivity(intent)
     }
 

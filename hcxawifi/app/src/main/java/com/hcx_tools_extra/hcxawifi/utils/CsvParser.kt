@@ -1,6 +1,6 @@
-package com.example.hcxawifi.utils
+package com.hcx_tools_extra.hcxawifi.utils
 
-import com.example.hcxawifi.data.model.NetworkItemCsv
+import com.hcx_tools_extra.hcxawifi.data.model.NetworkItemCsv
 
 object CsvParser {
 

@@ -1,4 +1,4 @@
-package com.example.hcxawifi.ui.main
+package com.hcx_tools_extra.hcxawifi.ui.main
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,10 +8,10 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import com.example.hcxawifi.R
-import com.example.hcxawifi.data.model.NetworkItem
-import com.example.hcxawifi.utils.NetworkUtils
-import com.example.hcxawifi.utils.UiHelper
+import com.hcx_tools_extra.hcxawifi.R
+import com.hcx_tools_extra.hcxawifi.data.model.NetworkItem
+import com.hcx_tools_extra.hcxawifi.utils.NetworkUtils
+import com.hcx_tools_extra.hcxawifi.utils.UiHelper
 
 class WifiAdapter(
     context: Context,

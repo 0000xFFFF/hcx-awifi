@@ -1,4 +1,4 @@
-package com.example.hcxawifi.utils
+package com.hcx_tools_extra.hcxawifi.utils
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -7,8 +7,8 @@ import android.content.IntentFilter
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.os.Build
-import com.example.hcxawifi.data.model.NetworkItem
-import com.example.hcxawifi.data.repository.NetworkItemCsvRepository
+import com.hcx_tools_extra.hcxawifi.data.model.NetworkItem
+import com.hcx_tools_extra.hcxawifi.data.repository.NetworkItemCsvRepository
 import java.util.concurrent.Executor
 
 class WifiScanManager(
@@ -84,7 +84,7 @@ class WifiScanManager(
                     ssid = scanResult.SSID,
                     level = scanResult.level,
                     capabilities = scanResult.capabilities,
-                    frequency = scanResult.frequency.toFloat(),
+                    frequency = scanResult.frequency,
                     channel = NetworkUtils.getChannelFromFrequency(scanResult.frequency),
                     standard = NetworkUtils.getStandardName(
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {

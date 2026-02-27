@@ -1,4 +1,4 @@
-package com.example.hcxawifi.utils
+package com.hcx_tools_extra.hcxawifi.utils
 
 import android.Manifest
 import android.app.Activity

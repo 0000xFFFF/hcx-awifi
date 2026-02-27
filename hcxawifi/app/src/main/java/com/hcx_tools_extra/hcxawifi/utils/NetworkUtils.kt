@@ -1,4 +1,4 @@
-package com.example.hcxawifi.utils
+package com.hcx_tools_extra.hcxawifi.utils
 
 object NetworkUtils {
     

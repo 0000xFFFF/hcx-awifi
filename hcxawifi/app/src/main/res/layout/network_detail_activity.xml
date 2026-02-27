@@ -11,16 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- SSID at the top -->
         <TextView
             android:id="@+id/ssidText"
             android:text="SSID"
             android:textStyle="bold"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textColor="@color/monokai_cyan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="16dp"/>
 
+        <!-- Signal strength -->
         <ProgressBar
             android:id="@+id/signalBarDetail"
             style="@android:style/Widget.ProgressBar.Horizontal"
@@ -29,52 +31,127 @@
             android:max="100"
             android:progress="0"
             android:progressTint="@color/monokai_green"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="24dp"/>
 
-        <TextView
-            android:id="@+id/bssidText"
-            android:text="BSSID"
-            android:textSize="16sp"
-            android:textColor="@color/monokai_foreground"
-            android:layout_width="wrap_content"
+        <!-- BSSID row -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginBottom="12dp">
 
-        <TextView
-            android:id="@+id/frequencyText"
-            android:text="Frequency"
-            android:textSize="16sp"
-            android:textColor="@color/monokai_foreground"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"/>
+            <TextView
+                android:text="BSSID:"
+                android:textColor="@color/monokai_foreground"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"/>
 
-        <TextView
-            android:id="@+id/channelText"
-            android:text="Channel"
-            android:textSize="16sp"
-            android:textColor="@color/monokai_foreground"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"/>
+            <TextView
+                android:id="@+id/bssidText"
+                android:text="value"
+                android:textColor="@color/monokai_comment"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/capabilitiesText"
-            android:text="Capabilities"
-            android:textSize="16sp"
-            android:textColor="@color/monokai_foreground"
-            android:layout_width="wrap_content"
+        <!-- Frequency row -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginBottom="12dp">
 
-        <TextView
-            android:id="@+id/levelText"
-            android:text="Level"
-            android:textSize="16sp"
-            android:textColor="@color/monokai_foreground"
-            android:layout_width="wrap_content"
+            <TextView
+                android:text="Frequency:"
+                android:textColor="@color/monokai_foreground"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/frequencyText"
+                android:text="value"
+                android:textColor="@color/monokai_comment"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <!-- Channel row -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:text="Channel:"
+                android:textColor="@color/monokai_foreground"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/channelText"
+                android:text="value"
+                android:textColor="@color/monokai_comment"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <!-- Capabilities row -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:text="Capabilities:"
+                android:textColor="@color/monokai_foreground"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/capabilitiesText"
+                android:text="value"
+                android:textColor="@color/monokai_comment"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <!-- Level row -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:text="Level:"
+                android:textColor="@color/monokai_foreground"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/levelText"
+                android:text="value"
+                android:textColor="@color/monokai_comment"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

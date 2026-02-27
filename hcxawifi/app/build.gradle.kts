@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.hcxawifi"
+    namespace = "com.hcx_tools_extra.hcxawifi"
     compileSdk = 36   // updated to meet library requirements
 
     defaultConfig {
-        applicationId = "com.example.hcxawifi"
+        applicationId = "com.hcx_tools_extra.hcxawifi"
         minSdk = 28     // Android 9+ (compatible with Galaxy S10)
         targetSdk = 36  // match compileSdk
         versionCode = 1
