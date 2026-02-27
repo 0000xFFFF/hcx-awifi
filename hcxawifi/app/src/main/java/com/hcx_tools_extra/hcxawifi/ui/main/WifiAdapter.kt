@@ -26,7 +26,6 @@ class WifiAdapter(
 
         val essidText: TextView = view.findViewById(R.id.essid)
         val bssidText: TextView = view.findViewById(R.id.bssid)
-        val detailsText: TextView = view.findViewById(R.id.details)
         val passwordText: TextView = view.findViewById(R.id.password)
         val levelText: TextView = view.findViewById(R.id.level)
         val icon: ImageView = view.findViewById(R.id.securityIcon)
@@ -34,7 +33,6 @@ class WifiAdapter(
 
         essidText.text = network.ssid.ifEmpty { "<Hidden SSID>" }
         bssidText.text = network.bssid.uppercase()
-        detailsText.text = network.capabilities
         levelText.text = "${network.level} dBm"
         passwordText.text = network.password?: ""
 

@@ -14,7 +14,7 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <!-- ROW 1: BSSID | ESSID | PASSWORD -->
+        <!-- BSSID | ESSID | PASSWORD -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,17 +57,7 @@
 
         </LinearLayout>
 
-        <!-- ROW 2: DETAILS -->
-        <TextView
-            android:id="@+id/details"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Details"
-            android:textColor="@color/monokai_comment"
-            android:textSize="10sp" />
-
-        <!-- ROW 3: PROGRESSBAR + LEVEL -->
+        <!-- PROGRESSBAR + LEVEL -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
