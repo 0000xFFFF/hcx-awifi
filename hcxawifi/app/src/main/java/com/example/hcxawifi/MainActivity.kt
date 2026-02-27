@@ -5,7 +5,11 @@ import androidx.activity.ComponentActivity
 import android.Manifest
 import android.content.*
 import android.content.pm.PackageManager
+import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -63,11 +67,7 @@ class MainActivity : ComponentActivity() {
                     "${it.SSID} | ${it.BSSID} | ${it.level} dBm | ${it.capabilities}"
                 }
 
-                listView.adapter = ArrayAdapter(
-                    this@MainActivity,
-                    android.R.layout.simple_list_item_1,
-                    networkList
-                )
+                listView.adapter = WifiAdapter(this@MainActivity, results)
 
             } catch (e: SecurityException) {
                 statusLabel.text = "Permission error: " + e.message
@@ -108,5 +108,37 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(wifiScanReceiver)
+    }
+
+    class WifiAdapter(
+        private val context: Context,
+        private val networks: List<ScanResult>
+    ) : ArrayAdapter<ScanResult>(context, 0, networks) {
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.list_item_network, parent, false)
+            val network = networks[position]
+
+            val ssidText: TextView = view.findViewById(R.id.ssid)
+            val detailsText: TextView = view.findViewById(R.id.details)
+            val icon: ImageView = view.findViewById(R.id.securityIcon)
+
+            // Safe text
+            ssidText.text = if (network.SSID.isNotEmpty()) network.SSID else "<Hidden SSID>"
+            detailsText.text = "${network.BSSID ?: "Unknown"} | ${network.level} dBm | ${network.capabilities ?: ""}"
+
+            // Safe icon
+            try {
+                icon.setImageResource(
+                    if (network.capabilities.contains("WEP") || network.capabilities.contains("WPA"))
+                        R.drawable.ic_lock else R.drawable.ic_unlock
+                )
+            } catch (e: Exception) {
+                // fallback icon if drawable missing
+                icon.setImageResource(android.R.drawable.ic_lock_idle_lock)
+            }
+
+            return view
+        }
     }
 }
