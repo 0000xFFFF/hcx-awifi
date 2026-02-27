@@ -23,6 +23,7 @@ class NetworkDetailActivity : ComponentActivity() {
         val capabilitiesTextView: TextView = findViewById(R.id.capabilitiesText)
         val levelTextView: TextView = findViewById(R.id.levelText)
         val signalBar: ProgressBar = findViewById(R.id.signalBarDetail)
+        val passwordTextView: TextView = findViewById(R.id.passwordText)
 
         // Receive the Parcelable NetworkItem
         val network = intent.getParcelableExtra<NetworkItem>("network")
@@ -35,6 +36,7 @@ class NetworkDetailActivity : ComponentActivity() {
             channelTextView.text = "${NetworkUtils.getChannelFromFrequency(network.frequency)}"
             capabilitiesTextView.text = network.capabilities
             levelTextView.text = "${network.level} dBm"
+            passwordTextView.text = network.password?: "";
 
             // Set ProgressBar value
             signalBar.progress = UiHelper.calculateSignalProgress(network.level)
