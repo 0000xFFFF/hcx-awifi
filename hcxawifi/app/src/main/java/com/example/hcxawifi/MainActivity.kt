@@ -67,7 +67,14 @@ class MainActivity : ComponentActivity() {
                     "${it.SSID} | ${it.BSSID} | ${it.level} dBm | ${it.capabilities}"
                 }
 
-                listView.adapter = WifiAdapter(this@MainActivity, results)
+                val strongestBySSID = results
+                    .groupBy { it.SSID }
+                    .mapNotNull { (_, group) ->
+                        // Ignore hidden SSIDs
+                        group.maxByOrNull { it.level }
+                    }
+                    .sortedByDescending { it.level }
+                listView.adapter = WifiAdapter(this@MainActivity, strongestBySSID)
 
             } catch (e: SecurityException) {
                 statusLabel.text = "Permission error: " + e.message
