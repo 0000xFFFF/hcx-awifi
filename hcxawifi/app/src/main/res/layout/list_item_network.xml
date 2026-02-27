@@ -29,6 +29,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#555555"/>
+
+        <!-- ProgressBar for signal strength -->
+        <ProgressBar
+            android:id="@+id/signalBar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:max="100"
+            android:progress="0"
+            android:progressTint="#4CAF50"
+            android:layout_marginTop="4dp"/>
     </LinearLayout>
 
     <ImageView

@@ -43,6 +43,20 @@ class MainActivity : ComponentActivity() {
             wifiScanReceiver,
             IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
         )
+
+        listView.setOnItemClickListener { _, _, position, _ ->
+            val network = listView.adapter.getItem(position) as ScanResult
+
+            val intent = Intent(this, NetworkDetailActivity::class.java)
+            intent.putExtra("SSID", network.SSID)
+            intent.putExtra("BSSID", network.BSSID)
+            intent.putExtra("FREQ", network.frequency)
+            intent.putExtra("LEVEL", network.level)
+            intent.putExtra("CAP", network.capabilities)
+            intent.putExtra("STD", network.wifiStandard)
+            intent.putExtra("PASS", network.isPasspointNetwork)
+            startActivity(intent)
+        }
     }
 
     // BroadcastReceiver for scan completion
@@ -144,6 +158,11 @@ class MainActivity : ComponentActivity() {
                 // fallback icon if drawable missing
                 icon.setImageResource(android.R.drawable.ic_lock_idle_lock)
             }
+
+            // Map RSSI (-100..0 dBm) to 0..100%
+            val progress = ((network.level + 100) * 100 / 70).coerceIn(0, 100)
+            val signalBar: ProgressBar = view.findViewById(R.id.signalBar)
+            signalBar.progress = progress
 
             return view
         }
