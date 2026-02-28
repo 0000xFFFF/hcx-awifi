@@ -8,6 +8,8 @@ hcx-wifi tool from [hcx-tools-extra](https://github.com/0000xFFFF/hcx-tools-extr
 | ---------------------------------- | ---------------------------------- |
 | ![preview1](preview/preview1.jpeg) | ![preview2](preview/preview2.jpeg) |
 
+To generate the password list CSV (for this app), use the hcx-wifi-genpasslst tool from [hcx-tools-extra](https://github.com/0000xFFFF/hcx-tools-extra).
+
 ## Disclaimer
 
 The hcx-tools-extra are intended for educational purposes only.
