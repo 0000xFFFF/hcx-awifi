@@ -42,7 +42,7 @@
         android:id="@+id/bottomBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:padding="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -52,7 +52,7 @@
             android:id="@+id/loadCsvButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="4dp"
             android:text="Load CSV"
             android:backgroundTint="@color/monokai_red"
             android:textColor="@color/monokai_background"
@@ -67,7 +67,7 @@
             android:id="@+id/scanButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="4dp"
             android:text="Scan"
             android:backgroundTint="@color/monokai_purple"
             android:textColor="@color/monokai_background"
@@ -76,34 +76,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintHorizontal_weight="1"/>
-
-        <!-- CSV status under Load CSV -->
-        <TextView
-            android:id="@+id/loadCsvStatusLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="CSV Loaded: 0 items"
-            android:textColor="@color/monokai_red"
-            android:textSize="12sp"
-            android:gravity="center"
-            android:layout_marginTop="4dp"
-            app:layout_constraintTop_toBottomOf="@id/loadCsvButton"
-            app:layout_constraintStart_toStartOf="@id/loadCsvButton"
-            app:layout_constraintEnd_toEndOf="@id/loadCsvButton"/>
-
-        <!-- Scan status under Scan -->
-        <TextView
-            android:id="@+id/scanStatusLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Status: Idle"
-            android:textColor="@color/monokai_purple"
-            android:textSize="12sp"
-            android:gravity="center"
-            android:layout_marginTop="4dp"
-            app:layout_constraintTop_toBottomOf="@id/scanButton"
-            app:layout_constraintStart_toStartOf="@id/scanButton"
-            app:layout_constraintEnd_toEndOf="@id/scanButton"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.hcx_tools_extra.hcxawifi.R
 import com.hcx_tools_extra.hcxawifi.data.model.NetworkItem
 import com.hcx_tools_extra.hcxawifi.data.repository.NetworkItemCsvRepository
+import com.hcx_tools_extra.hcxawifi.utils.Obfusate
 import com.hcx_tools_extra.hcxawifi.utils.UiHelper
 import com.hcx_tools_extra.hcxawifi.utils.WifiScanManager
 
@@ -28,9 +29,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var wifiScanManager: WifiScanManager
     
     private lateinit var scanButton: Button
-    private lateinit var scanStatusLabel: TextView
     private lateinit var loadCsvButton: Button
-    private lateinit var loadCsvStatusLabel: TextView
     private lateinit var listView: ListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,9 +38,7 @@ class MainActivity : ComponentActivity() {
 
         // Initialize UI elements
         scanButton = findViewById(R.id.scanButton)
-        scanStatusLabel = findViewById(R.id.scanStatusLabel)
         loadCsvButton = findViewById(R.id.loadCsvButton)
-        loadCsvStatusLabel = findViewById(R.id.loadCsvStatusLabel)
         listView = findViewById(R.id.networkList)
         swipeRefresh = findViewById(R.id.swipeRefresh)
 
@@ -54,7 +51,7 @@ class MainActivity : ComponentActivity() {
             repository,
             mainExecutor,
             onScanComplete = { results -> handleScanResults(results) },
-            onError = { error -> scanStatusLabel.text = error }
+            onError = { error -> scanButton.text = error }
         )
 
         swipeRefresh.setOnRefreshListener {
@@ -76,12 +73,16 @@ class MainActivity : ComponentActivity() {
         }
 
         checkPermissionAndScan()
+
+
     }
 
+    val obfuscationMode = false
     private fun handleScanResults(results: List<ScanResult>) {
         val filtered = wifiScanManager.filterAndSortResults(results)
-        listView.adapter = WifiAdapter(this, filtered)
-        UiHelper.flashSuccessLabel(this, scanStatusLabel, "${filtered.size} networks")
+        val items = if (obfuscationMode) Obfusate.randomizeNetworks(filtered) else filtered
+        listView.adapter = WifiAdapter(this, items)
+        UiHelper.flashSuccessLabel(this, scanButton, "${items.size} networks")
     }
 
     private fun handleNetworkItemClick(position: Int) {
@@ -101,7 +102,7 @@ class MainActivity : ComponentActivity() {
             if (isGranted) {
                 startWifiScan()
             } else {
-                scanStatusLabel.text = "Permission denied"
+                scanButton.text = "Permission denied"
             }
         }
 
@@ -118,7 +119,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun startWifiScan() {
-        scanStatusLabel.text = "Scanning..."
+        scanButton.text = "Scanning..."
         wifiScanManager.startScan()
     }
 
@@ -145,6 +146,6 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun updateCsvLabel(count: Int) {
-        loadCsvStatusLabel.text = "$count passwords"
+        loadCsvButton.text = "$count passwords"
     }
 }

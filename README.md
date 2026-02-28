@@ -1,2 +1,2 @@
 # hcx-awifi
-WORK IN PROGRESS: hcx-wifi from hcx-tools-extra but android app
+- tool from [hcx-tools-extra](https://github.com/0000xFFFF/hcx-tools-extra) but android app

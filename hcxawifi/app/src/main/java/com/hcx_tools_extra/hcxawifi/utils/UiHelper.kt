@@ -18,7 +18,7 @@ object UiHelper {
                     .alpha(0.6f)
                     .setDuration(1000)
                     .withEndAction {
-                        label.setTextColor(ContextCompat.getColor(context, R.color.monokai_purple))
+                        label.setTextColor(ContextCompat.getColor(context, R.color.monokai_background))
                         label.alpha = 1f
                     }
                     .start()
