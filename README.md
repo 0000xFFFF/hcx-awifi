@@ -1,5 +1,7 @@
 # hcx-awifi
 
+airodump-ng clone that shows you passwords of nearby networks you have cracked with hashcat
+
 hcx-wifi tool from [hcx-tools-extra](https://github.com/0000xFFFF/hcx-tools-extra) made as an android app
 
 | Scanning                           | Details                            |
